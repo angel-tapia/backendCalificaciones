@@ -3,19 +3,11 @@ from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.units import inch
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
-
 from app.models.alumno import Alumno
 from app.models.materia import MateriaAlumnos
 from app.models.profesor import Profesor
 
-def generate_pdf(
-    alumno: Alumno,
-    materiaAlumno: MateriaAlumnos,
-    profesor: Profesor,
-    calificacionIncorrecta: str,
-    calificacionCorrecta: str,
-    motivo: str
-) -> str:
+def generate_pdf(alumno: Alumno, materiaAlumno: MateriaAlumnos, profesor: Profesor, calificacionIncorrecta: str, calificacionCorrecta: str, motivo: str) -> str:
     file_path = "change_request.pdf"
     doc = SimpleDocTemplate(file_path, pagesize=letter)
     styles = getSampleStyleSheet()
@@ -36,7 +28,7 @@ def generate_pdf(
         ["Materia:", f"{materiaAlumno.NombreMateria}"],
         ["Clave:", f"{materiaAlumno.ClaveMateria}"],
         ["Gpo.:", f"{materiaAlumno.Grupo}"],
-        ["Plan:", f"{materiaAlumno.Alumnos[0].Oportunidad if materiaAlumno.Alumnos else '420'}"]
+        ["Plan:", f"{materiaAlumno.ClaveMateria}"],
     ]
     course_table = Table(course_data, colWidths=[1 * inch, 3 * inch])
     course_table.setStyle(TableStyle([
@@ -52,20 +44,20 @@ def generate_pdf(
 
     # Exam Type
     if alumno.Oportunidad == '1' or alumno.Oportunidad == '3' or alumno.Oportunidad == '5':
-        elements.append(Paragraph("Tipo Examen:      ORD.      X          EXT.", styles['Normal']))
+      elements.append(Paragraph("Tipo Examen:      ORD.      X          EXT.", styles['Normal']))
     else: 
-        elements.append(Paragraph("Tipo Examen:      ORD.        EXT.   X", styles['Normal']))
+      elements.append(Paragraph("Tipo Examen:      ORD.        EXT.   X", styles['Normal']))
     elements.append(Spacer(1, 12))
 
     # Motivo
-    motivo_data = [["Motivo:", motivo]]
+    motivo_data = [["Motivo:", f"{motivo}"]]
     motivo_table = Table(motivo_data, colWidths=[1 * inch, 5 * inch])
     motivo_table.setStyle(TableStyle([
         ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
         ('FONTNAME', (0, 0), (-1, -1), 'Helvetica'),
         ('FONTSIZE', (0, 0), (-1, -1), 10),
         ('BOTTOMPADDING', (0, 0), (-1, -1), 5),
-        ('BACKGROUND', (0, 0), colors.white),
+        ('BACKGROUND', (0, 0), (-1, 0), colors.white),
         ('GRID', (0, 0), (-1, -1), 0.5, colors.black),
     ]))
     elements.append(motivo_table)
@@ -74,18 +66,18 @@ def generate_pdf(
     # Grades Information
     grades_data = [
         ["Matrícula", "Nombre", "Calificación Incorrecta (capturada en SIASE)", "Calificación Correcta"],
-        [f"{alumno.Matricula}", f"{alumno.Nombre}", calificacionIncorrecta, calificacionCorrecta],
+        [f"{alumno.Matricula}", f"{alumno.Nombre[:30]}", f"{calificacionIncorrecta}", f"{calificacionCorrecta}"],
         ["", "", "", ""],  # Empty rows
         ["", "", "", ""],
         ["", "", "", ""]
     ]
-    grades_table = Table(grades_data, colWidths=[1 * inch, 2 * inch, 2 * inch, 1 * inch])
+    grades_table = Table(grades_data, colWidths=[1 * inch, 2.5 * inch, 3 * inch, 1.5 * inch])
     grades_table.setStyle(TableStyle([
         ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
         ('FONTNAME', (0, 0), (-1, -1), 'Helvetica'),
         ('FONTSIZE', (0, 0), (-1, -1), 10),
         ('BOTTOMPADDING', (0, 0), (-1, -1), 5),
-        ('BACKGROUND', (0, 0), colors.white),
+        ('BACKGROUND', (0, 0), (-1, 0), colors.white),
         ('GRID', (0, 0), (-1, -1), 0.5, colors.black),
     ]))
     elements.append(grades_table)
@@ -121,8 +113,8 @@ def generate_pdf(
     signature_table.setStyle(TableStyle([
         ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
         ('FONTNAME', (0, 0), (-1, -1), 'Helvetica'),
-        ('FONTSIZE', (0, 0), 10),
-        ('BOTTOMPADDING', (0, 0), 5),
+        ('FONTSIZE', (0, 0), (-1, -1), 10),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 5),
     ]))
     elements.append(signature_table)
     
