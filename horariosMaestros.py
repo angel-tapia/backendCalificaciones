@@ -2,7 +2,7 @@ import pandas as pd
 import json
 
 # Load the Excel file
-file_path = '/Users/angel/Desktop/Angel/9no Semestre/Servicio Social/Horarios_Maestros_AD2024 1.xlsx'  # Update this with the correct path to your file
+file_path = '/Users/angel/Desktop/Angel/9no Semestre/Servicio Social/Horarios_Maestros_AD2024.xlsx'  # Update this with the correct path to your file
 excel_data = pd.read_excel(file_path)
 
 # Clean up any leading/trailing whitespace from columns
@@ -11,6 +11,19 @@ excel_data.columns = excel_data.columns.str.strip()
 # Initialize variables to hold the parsed data
 result = []
 current_professor = None
+
+# Function to map 'Modalidad' values
+def map_modalidad(modalidad_value):
+    if pd.isnull(modalidad_value):
+        return ''
+    modalidad_value = int(modalidad_value)
+    if modalidad_value == 1:
+        return '420'
+    elif modalidad_value == 4:
+        return '430'
+    elif modalidad_value == 5:
+        return '440'
+    return str(modalidad_value)
 
 # Iterate over the rows in the dataframe
 for index, row in excel_data.iterrows():
@@ -33,10 +46,11 @@ for index, row in excel_data.iterrows():
         if clave == 'nan':
             continue
         materia = {
-            "ClaveMateria": clave,
+            "ClaveMateria": clave.upper(),
             "NombreMateria": nombre,
-            "Grupo": str(int(row['Grupo'])).strip(),
-            "Plan": str(int(row['Plan'])).strip()
+            "Grupo": str(row['Grupo']).strip(),
+            "Plan": map_modalidad(row['Modalidad']).strip(),
+            "Academia": str(row['Academia']).strip()
         }
         if materia not in current_professor['Materias']:
           current_professor['Materias'].append(materia)
@@ -47,7 +61,7 @@ if current_professor is not None:
 
 
 # Output the JSON to a file
-output_file = '/Users/angel/Desktop/Angel/9no Semestre/Servicio Social/professors_subjects.json'
+output_file = '/Users/angel/Desktop/Angel/9no Semestre/backendCalificaciones/app/data/professors_subjects.json'
 with open(output_file, 'w', encoding='utf-8') as json_file:
     json.dump(result, json_file, ensure_ascii=False, indent=4)
 
