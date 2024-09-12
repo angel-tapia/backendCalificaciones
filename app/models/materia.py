@@ -7,6 +7,7 @@ class MateriaProfesor(BaseModel):
   NombreMateria: str
   Grupo: str
   Plan: str
+  Academia: str
 
 class MateriaAlumnos(BaseModel):
   ClaveMateria: str

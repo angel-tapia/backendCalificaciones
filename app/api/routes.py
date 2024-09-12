@@ -2,7 +2,6 @@ from fastapi import APIRouter, HTTPException
 from fastapi.responses import FileResponse
 from app.data.generate_pdf import generate_pdf
 from app.models.PdfRequest import PdfRequest
-from app.models.alumno import Alumno
 from app.models.materia import MateriaAlumnos
 from app.models.profesor import Profesor
 from app.data.data_loader import getListaAlumnos420, getListaAlumnos430, getListaAlumnos440, getListaMaterias
