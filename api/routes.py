@@ -47,4 +47,4 @@ async def create_pdf(request: PdfRequest):
 
 @router.get("/")
 async def health_check():
-    return "Everything is fine."
+    return "Everything is fine!"
