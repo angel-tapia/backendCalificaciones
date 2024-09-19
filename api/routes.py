@@ -47,5 +47,5 @@ async def create_pdf(request: PdfRequest):
         request.academia,
         request.nombreCoordinador,
     )
-    return FileResponse(pdf_file_path, media_type='application/pdf', filename="output.pdf")
+    return FileResponse(pdf_file_path, media_type='application/pdf', filename="output.pdf", status_code=200)
 
