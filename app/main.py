@@ -8,6 +8,7 @@ app = FastAPI()
 # Configure CORS
 origins = [
     "http://localhost:3000",  # React app running on localhost:3000
+    "https://cambio-calificaciones.vercel.app", # Production app
 ]
 
 app.add_middleware(

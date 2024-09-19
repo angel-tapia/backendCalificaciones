@@ -45,6 +45,6 @@ async def create_pdf(request: PdfRequest):
     )
     return FileResponse(pdf_file_path, media_type='application/pdf', filename="output.pdf")
 
-@router.get('/')
-async def read_root():
-    return {"message": "Hello World"}
+@router.get("/")
+async def health_check():
+    return "Everything is fine."
