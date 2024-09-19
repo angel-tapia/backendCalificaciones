@@ -7,10 +7,10 @@ def load_json_data(filepath):
     with open(filepath, 'r') as f:
         return json.load(f)
 
-data_plan_420 = load_json_data('app/data/Listas 420.json')
-data_plan_430 = load_json_data('app/data/Listas 430.json')
-data_plan_440 = load_json_data('app/data/Listas 440.json')
-materias_profesores = load_json_data('app/data/professors_subjects.json')
+data_plan_420 = load_json_data('data/Listas 420.json')
+data_plan_430 = load_json_data('data/Listas 430.json')
+data_plan_440 = load_json_data('data/Listas 440.json')
+materias_profesores = load_json_data('data/professors_subjects.json')
 
 def getListaMaterias(employee_id: str) -> Optional[Profesor]:
     for profesor in materias_profesores:
