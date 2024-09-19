@@ -35,10 +35,13 @@ async def create_pdf(request: PdfRequest):
     pdf_file_path = generate_pdf(
         request.alumno,
         request.materiaAlumno,
+        request.plan,
         request.profesor,
         request.calificacionIncorrecta,
         request.calificacionCorrecta,
         request.motivo,
+        request.academia,
+        request.nombreCoordinador,
     )
     return FileResponse(pdf_file_path, media_type='application/pdf', filename="output.pdf")
 

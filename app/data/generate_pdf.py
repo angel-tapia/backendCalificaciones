@@ -3,11 +3,21 @@ from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.units import inch
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
+from datetime import date
+
 from app.models.alumno import Alumno
 from app.models.materia import MateriaAlumnos
 from app.models.profesor import Profesor
 
-def generate_pdf(alumno: Alumno, materiaAlumno: MateriaAlumnos, profesor: Profesor, calificacionIncorrecta: str, calificacionCorrecta: str, motivo: str) -> str:
+def generate_pdf(alumno: Alumno,
+                 materiaAlumno: MateriaAlumnos,
+                 plan: str,
+                 profesor: Profesor,
+                 calificacionIncorrecta: str,
+                 calificacionCorrecta: str,
+                 motivo: str,
+                 academia: str,
+                 nombreCoordinador: str) -> str:
     file_path = "change_request.pdf"
     doc = SimpleDocTemplate(file_path, pagesize=letter)
     styles = getSampleStyleSheet()
@@ -28,7 +38,7 @@ def generate_pdf(alumno: Alumno, materiaAlumno: MateriaAlumnos, profesor: Profes
         ["Materia:", f"{materiaAlumno.NombreMateria}"],
         ["Clave:", f"{materiaAlumno.ClaveMateria}"],
         ["Gpo.:", f"{materiaAlumno.Grupo}"],
-        ["Plan:", f"{materiaAlumno.ClaveMateria}"],
+        ["Plan:", f"{plan}"],
     ]
     course_table = Table(course_data, colWidths=[1 * inch, 3 * inch])
     course_table.setStyle(TableStyle([
@@ -88,9 +98,11 @@ def generate_pdf(alumno: Alumno, materiaAlumno: MateriaAlumnos, profesor: Profes
     elements.append(footer)
     elements.append(Spacer(1, 12))
 
+    months = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"]
+    today = date.today()
     footer_info = [
         ["ATENTAMENTE.-", "Vo. Bo."],
-        ["San Nicolás de los Garza, N.L. a 19 de Junio de 2024", ""]
+        [f"San Nicolás de los Garza, N.L. a {today.day} de {months[today.month - 1]} de {today.year}"]
     ]
     footer_table = Table(footer_info, colWidths=[4.5 * inch, 2 * inch])
     footer_table.setStyle(TableStyle([
@@ -104,10 +116,10 @@ def generate_pdf(alumno: Alumno, materiaAlumno: MateriaAlumnos, profesor: Profes
     # Signatures
     elements.append(Spacer(1, 48))
     signature_info = [
-        ["Adrian Flores", "Guillermo Sanchez", "Miguel Alejandro Candelaria Coronado"],
-        ["ADRIAN ISRAEL FLORES RODRIGUEZ", "Dr. Guillermo Ezequiel Sánchez", "M.A. Miguel Alejandro Candelaria Coronado"],
-        ["", "Guerrero Coordinador de la Licenciatura", "Subdirector Académico"],
-        ["", "en Seguridad Tecnologías de Información", ""]
+        [profesor.NombreMaestro, "             ", nombreCoordinador],
+        [""],
+        [" ", " ", " "],
+        [" ", " ", " "]
     ]
     signature_table = Table(signature_info, colWidths=[2 * inch, 2 * inch, 2 * inch])
     signature_table.setStyle(TableStyle([
