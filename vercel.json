@@ -5,10 +5,15 @@
     "use": "@vercel/python"
     }
   ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "api/routes.py"
+    }
+  ],
   "headers": [
     {
       "source": "/(.*)",
-      "dest": "api/routes.py",
       "headers": [
         { "key": "Access-Control-Allow-Credentials", "value": "true" },
         { "key": "Access-Control-Allow-Origin", "value": "*" },
