@@ -6,13 +6,13 @@ from models.materia import MateriaAlumnos
 from models.profesor import Profesor
 from data.data_loader import getListaAlumnos420, getListaAlumnos430, getListaAlumnos440, getListaMaterias
 
-router = APIRouter()
+app = APIRouter()
 
-@router.get("/")
+@app.get("/")
 async def health_check():
     return "Everything is fine!"
 
-@router.get("/alumnos/{plan}/{subjectId}/{group}", response_model=MateriaAlumnos)
+@app.get("/alumnos/{plan}/{subjectId}/{group}", response_model=MateriaAlumnos)
 async def getAlumnos(plan: str, subjectId: str, group: str):
     response = None
     if plan == "420":
@@ -27,14 +27,14 @@ async def getAlumnos(plan: str, subjectId: str, group: str):
         raise HTTPException(status_code=404, detail="Materia not found")
     return response
 
-@router.get("/materias/{employee_id}", response_model=Profesor)
+@app.get("/materias/{employee_id}", response_model=Profesor)
 async def getMaterias(employee_id: str):
     response = getListaMaterias(employee_id)
     if response is None:
         raise HTTPException(status_code=404, detail="Employee not found")
     return response
 
-@router.post("/pdf", response_class=FileResponse)
+@app.post("/pdf", response_class=FileResponse)
 async def create_pdf(request: PdfRequest):
     pdf_file_path = generate_pdf(
         request.alumno,
