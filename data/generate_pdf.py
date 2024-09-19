@@ -5,9 +5,9 @@ from reportlab.lib.units import inch
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
 from datetime import date
 
-from app.models.alumno import Alumno
-from app.models.materia import MateriaAlumnos
-from app.models.profesor import Profesor
+from models.alumno import Alumno
+from models.materia import MateriaAlumnos
+from models.profesor import Profesor
 
 def generate_pdf(alumno: Alumno,
                  materiaAlumno: MateriaAlumnos,

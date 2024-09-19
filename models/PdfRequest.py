@@ -1,8 +1,8 @@
 from pydantic import BaseModel
 
-from app.models.alumno import Alumno
-from app.models.materia import MateriaAlumnos
-from app.models.profesor import Profesor
+from models.alumno import Alumno
+from models.materia import MateriaAlumnos
+from models.profesor import Profesor
 
 class PdfRequest(BaseModel):
     alumno: Alumno

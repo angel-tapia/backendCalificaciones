@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from app.models.alumno import Alumno
+from models.alumno import Alumno
 from typing import List
 
 class MateriaProfesor(BaseModel):

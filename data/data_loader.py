@@ -1,7 +1,7 @@
 import json
 from typing import Optional
-from app.models.materia import MateriaAlumnos
-from app.models.profesor import Profesor
+from models.materia import MateriaAlumnos
+from models.profesor import Profesor
 
 def load_json_data(filepath):
     with open(filepath, 'r') as f:
