@@ -12,7 +12,7 @@
       "methods": ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
       "headers": {
         "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "POST",
+        "Access-Control-Allow-Methods": "OPTIONS",
         "Access-Control-Allow-Headers": "Content-Type, Authorization"
       }
     }
