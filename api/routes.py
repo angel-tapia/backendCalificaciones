@@ -45,33 +45,20 @@ async def getMaterias(employee_id: str):
         raise HTTPException(status_code=404, detail="Employee not found")
     return response
 
-@app.get("/pdf", response_class=FileResponse)
-async def create_pdf(
-    request: Request,
-    alumno: str = Query(...),
-    materiaAlumno: str = Query(...),
-    plan: str = Query(...),
-    profesor: str = Query(...),
-    calificacionIncorrecta: str = Query(...),
-    calificacionCorrecta: str = Query(...),
-    motivo: str = Query(...),
-    academia: str = Query(...),
-    nombreCoordinador: str = Query(...)
-):
-    if request.method == "OPTIONS":
-        return JSONResponse(status_code=200, content={"body": "OK"})
-    
+@app.post("/pdf", response_class=FileResponse)
+async def create_pdf(pdf_request: PdfRequest):
     pdf_file_path = generate_pdf(
-        alumno,
-        materiaAlumno,
-        plan,
-        profesor,
-        calificacionIncorrecta,
-        calificacionCorrecta,
-        motivo,
-        academia,
-        nombreCoordinador,
+        pdf_request.alumno,
+        pdf_request.materiaAlumno,
+        pdf_request.plan,
+        pdf_request.profesor,
+        pdf_request.calificacionIncorrecta,
+        pdf_request.calificacionCorrecta,
+        pdf_request.motivo,
+        pdf_request.academia,
+        pdf_request.nombreCoordinador,
     )
     
     return FileResponse(pdf_file_path, media_type='application/pdf', filename="output.pdf", status_code=200)
+
 main_app.include_router(app)
