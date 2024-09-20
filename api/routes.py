@@ -23,7 +23,7 @@ app = APIRouter()
 async def health_check():
     return "Everything is fine!"
 
-@app.get("/alumnos/{plan}/{subjectId}/{group}", response_model=MateriaAlumnos)
+@app.get("api/alumnos/{plan}/{subjectId}/{group}", response_model=MateriaAlumnos)
 async def getAlumnos(plan: str, subjectId: str, group: str):
     response = None
     if plan == "420":
@@ -38,14 +38,14 @@ async def getAlumnos(plan: str, subjectId: str, group: str):
         raise HTTPException(status_code=404, detail="Materia not found")
     return response
 
-@app.get("/materias/{employee_id}", response_model=Profesor)
+@app.get("api/materias/{employee_id}", response_model=Profesor)
 async def getMaterias(employee_id: str):
     response = getListaMaterias(employee_id)
     if response is None:
         raise HTTPException(status_code=404, detail="Employee not found")
     return response
 
-@app.post("/pdf", response_class=FileResponse)
+@app.post("api/pdf", response_class=FileResponse)
 async def create_pdf(pdf_request: PdfRequest):
     pdf_file_path = generate_pdf(
         pdf_request.alumno,
