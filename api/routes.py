@@ -45,7 +45,7 @@ async def getMaterias(employee_id: str):
         raise HTTPException(status_code=404, detail="Employee not found")
     return response
 
-@app.put("/pdf", response_class=FileResponse)
+@app.post("/pdf", response_class=FileResponse)
 async def create_pdf(request: PdfRequest):
     pdf_file_path = generate_pdf(
         request.alumno,
