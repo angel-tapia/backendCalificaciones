@@ -1,10 +1,21 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import FastAPI, APIRouter, HTTPException
 from fastapi.responses import FileResponse
+from fastapi.middleware.cors import CORSMiddleware
 from data.generate_pdf import generate_pdf
 from models.PdfRequest import PdfRequest
 from models.materia import MateriaAlumnos
 from models.profesor import Profesor
 from data.data_loader import getListaAlumnos420, getListaAlumnos430, getListaAlumnos440, getListaMaterias
+
+main_app = FastAPI()  
+
+main_app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"], 
+)
 
 app = APIRouter()
 
@@ -49,3 +60,4 @@ async def create_pdf(request: PdfRequest):
     )
     return FileResponse(pdf_file_path, media_type='application/pdf', filename="output.pdf", status_code=200)
 
+main_app.include_router(app)
