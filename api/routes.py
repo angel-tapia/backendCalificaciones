@@ -1,5 +1,5 @@
-from fastapi import FastAPI, APIRouter, HTTPException
-from fastapi.responses import FileResponse
+from fastapi import FastAPI, APIRouter, HTTPException, Request
+from fastapi.responses import FileResponse, JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from data.generate_pdf import generate_pdf
 from models.PdfRequest import PdfRequest
@@ -46,18 +46,22 @@ async def getMaterias(employee_id: str):
     return response
 
 @app.post("/pdf", response_class=FileResponse)
-async def create_pdf(request: PdfRequest):
+async def create_pdf(request: Request, pdf_request: PdfRequest):
+    if request.method == "OPTIONS":
+        return JSONResponse(status_code=200, content={"body": "OK"})
+    
     pdf_file_path = generate_pdf(
-        request.alumno,
-        request.materiaAlumno,
-        request.plan,
-        request.profesor,
-        request.calificacionIncorrecta,
-        request.calificacionCorrecta,
-        request.motivo,
-        request.academia,
-        request.nombreCoordinador,
+        pdf_request.alumno,
+        pdf_request.materiaAlumno,
+        pdf_request.plan,
+        pdf_request.profesor,
+        pdf_request.calificacionIncorrecta,
+        pdf_request.calificacionCorrecta,
+        pdf_request.motivo,
+        pdf_request.academia,
+        pdf_request.nombreCoordinador,
     )
+    
     return FileResponse(pdf_file_path, media_type='application/pdf', filename="output.pdf", status_code=200)
 
 main_app.include_router(app)
