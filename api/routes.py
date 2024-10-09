@@ -4,7 +4,7 @@ from data.generate_pdf import generate_pdf
 from models.PdfRequest import PdfRequest
 from models.materia import MateriaAlumnos
 from models.profesor import Profesor
-from data.data_loader import getListaAlumnos420, getListaAlumnos430, getListaAlumnos440, getListaMaterias
+from data.data_loader import getListaAlumnos420, getListaAlumnos430, getListaAlumnos440, getListaMaterias, getEmployeeIdByEmail
 
 app = APIRouter()
 
@@ -45,3 +45,11 @@ async def create_pdf(pdf_request: PdfRequest):
     )
     
     return FileResponse(pdf_file_path, media_type='application/pdf', filename="output.pdf", status_code=200)
+
+@app.get("/api/matricula/{email}", response_model=str)
+async def getEmployeeId(email: str):
+    response = getEmployeeIdByEmail(email)
+
+    if response is None:
+        raise HTTPException(status_code=404, detail="Employee not found")
+    return response

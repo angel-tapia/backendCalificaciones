@@ -11,6 +11,13 @@ data_plan_420 = load_json_data('data/Listas 420.json')
 data_plan_430 = load_json_data('data/Listas 430.json')
 data_plan_440 = load_json_data('data/Listas 440.json')
 materias_profesores = load_json_data('data/professors_subjects.json')
+employee_emails = load_json_data('data/EmployeeEmails.json')
+
+def getEmployeeIdByEmail(email: str) -> Optional[str]:
+    for employee in employee_emails:
+        if employee['EmployeeEmail'] == email:
+            return employee['EmployeeId']
+    return None
 
 def getListaMaterias(employee_id: str) -> Optional[Profesor]:
     for profesor in materias_profesores:
