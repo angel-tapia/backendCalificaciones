@@ -3,3 +3,4 @@ fastapi-cors
 uvicorn
 reportlab
 pydantic
+python-jose
