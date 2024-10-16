@@ -51,12 +51,12 @@ async def getMaterias(employee_id: str):
 @app.post("/api/pdf", response_class=FileResponse, dependencies=[Depends(verify_auth_token)])
 async def create_pdf(pdf_request: PdfRequest):
     pdf_file_path = generate_pdf(
-        pdf_request.alumno,
+        pdf_request.alumnos,
         pdf_request.materiaAlumno,
         pdf_request.plan,
         pdf_request.profesor,
-        pdf_request.calificacionIncorrecta,
-        pdf_request.calificacionCorrecta,
+        pdf_request.calificacionesIncorrectas,
+        pdf_request.calificacionesCorrectas,
         pdf_request.motivo,
         pdf_request.academia,
         pdf_request.nombreCoordinador,
