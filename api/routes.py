@@ -13,10 +13,13 @@ app = APIRouter()
 
 def verify_auth_token(request: Request):
     token = request.headers.get('Authorization')
+
     if token is None:
         raise HTTPException(status_code=401, detail="Token not found")
+    
     if not verify_token(token):
         raise HTTPException(status_code=401, detail="Token is invalid or expired.")
+    
     return True
 
 @app.get("/api/alumnos/{plan}/{subjectId}/{group}", response_model=MateriaAlumnos, dependencies=[Depends(verify_auth_token)])
@@ -30,8 +33,10 @@ async def getAlumnos(plan: str, subjectId: str, group: str):
         response = getListaAlumnos440(subjectId, group)
     else:
         raise HTTPException(status_code=404, detail="Plan not found")
+    
     if response is None:
         raise HTTPException(status_code=404, detail="Materia not found")
+    
     return response
 
 @app.get("/api/materias/{employee_id}", response_model=Profesor, dependencies=[Depends(verify_auth_token)])
@@ -57,7 +62,7 @@ async def create_pdf(pdf_request: PdfRequest):
         pdf_request.nombreCoordinador,
     )
     
-    return FileResponse(pdf_file_path, media_type='application/pdf', filename="output.pdf", status_code=200)
+    return FileResponse(pdf_file_path, media_type='application/pdf', filename="output.pdf", status_code=201)
 
 @app.get("/api/matricula/{email}", response_model=str, dependencies=[Depends(verify_auth_token)])
 async def getEmployeeId(email: str):
@@ -65,4 +70,5 @@ async def getEmployeeId(email: str):
 
     if response is None:
         raise HTTPException(status_code=404, detail="Employee not found")
+    
     return response
