@@ -4,3 +4,4 @@ uvicorn
 reportlab
 pydantic
 python-jose
+requests
